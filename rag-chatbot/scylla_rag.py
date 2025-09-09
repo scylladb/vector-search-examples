@@ -117,7 +117,7 @@ if __name__ == "__main__":
         nodes = scylla_rag.fetch_chunks("rag.chunks", user_input, top_k=3)
         
         chunks = [str(node['chunk_id']) for node in nodes]
-        print("Retrieved chunk IDs:", chunks)
+        print("---\nRetrieved chunk IDs:", chunks)
         
         scylla_rag.query_llm_ollama(user_input, [node["text"] for node in nodes])
     
