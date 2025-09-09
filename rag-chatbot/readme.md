@@ -16,7 +16,7 @@ The chatbot allows users to ask questions about ScyllaDB, retrieves relevant chu
 
 ## Prerequisites
 * Sign up for [ScyllaDB Cloud](https://cloud.scylladb.com/)
-* [Docker](https://docs.docker.com/engine/install/) installed.
+* [Docker](https://docs.docker.com/engine/install/) installed
 * Python
 
 ## Setup
@@ -48,12 +48,12 @@ The chatbot allows users to ask questions about ScyllaDB, retrieves relevant chu
 ### 2. Ollama setup
 1. Create Docker network:
     ```sh
-    docker network create rag
+    docker network create scylla_rag_network
     ```
 1. Start Ollama service:
     ```sh
     docker run -d \
-        --network rag \
+        --network scylla_rag_network \
         -v ollama:/root/.ollama \
         --name ollama \
         ollama/ollama
@@ -67,7 +67,7 @@ The chatbot allows users to ask questions about ScyllaDB, retrieves relevant chu
 1. Run container and add database credentials as `ENV` variables:
     ```sh
     docker run --rm -d \
-        --network rag \
+        --network scylla_rag_network \
         --name scylla_rag_app \
         -e scylla_host="$SCYLLA_HOST" \
         -e scylla_port="$SCYLLA_PORT" \
@@ -88,6 +88,14 @@ The chatbot allows users to ask questions about ScyllaDB, retrieves relevant chu
 1. Start the chatbot:
     ```sh
     docker exec -it scylla_rag_app python scylla_rag.py
+    ```
+
+    ```
+    Enter your question: What's ScyllaDB?
+    ---
+    Retrieved chunk IDs: ['5d460612-583b-4eca-96b5-770046d769dc', 'e3b2028f-6d93-4bdf-9fd0-c6d9fec851ac', '4c632adc-8a18-4bd3-bbdd-210e1d921112']
+    Chatbot response:
+    ScyllaDB is a low latency distributed NoSQL database [...]
     ```
 
 ## Links
