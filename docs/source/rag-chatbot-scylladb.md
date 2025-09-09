@@ -4,7 +4,7 @@ This tutorial shows you how to build a **Retrieval-Augmented Generation (RAG)** 
 
 The chatbot runs in your terminal and lets you ask questions about ScyllaDB documentation.
 
-Source code is available on GitHub.
+Source code is [available on GitHub](https://github.com/scylladb/vector-search-examples/tree/main/rag-chatbot).
 
 ## Prerequisites
 * [ScyllaDB Cloud account](https://cloud.scylladb.com/)
@@ -281,9 +281,10 @@ ScyllaDB acts as a persistent store for the document chunk embeddings, enabling 
         scylla_rag.query_llm(user_input, [node["text"] for node in nodes])
     ```
 
-The complete RAG application file is available on GitHub.
+The complete RAG application file is available on [GitHub](https://github.com/scylladb/vector-search-examples/tree/main/rag-chatbot).
 
 ## Relevant resources
-* ScyllaDB docs
-* Ollama
-* LlamaIndex
+* [ScyllaDB Cloud](https://cloud.scylladb.com/)
+* [ScyllaDB Documentation](https://docs.scylladb.com/)
+* [Ollama](https://ollama.com/)
+* [LlamaIndex](https://docs.llamaindex.ai/en/stable/)

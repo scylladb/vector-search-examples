@@ -18,8 +18,8 @@
   :button_style: bold
 
   This site provides examples of using ScyllaDB as a vector store and search tool.
-  See how ScyllaDB can be used to build RAG applications, semantic search layers, and how it works together with
-  popular LLM libraries like LlamaIndex or LangChain.
+  See how ScyllaDB can be used to build RAG applications, semantic caching layers, and how it works together with
+  popular LLM libraries like LlamaIndex and LangChain.
 
 .. raw:: html
 
