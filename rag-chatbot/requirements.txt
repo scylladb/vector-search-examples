@@ -1,0 +1,4 @@
+scylla-driver==3.29.4
+ollama==0.5.3
+spacy==3.8.7
+llama-index==0.14.0
