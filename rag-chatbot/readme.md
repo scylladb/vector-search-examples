@@ -90,12 +90,6 @@ The chatbot allows users to ask questions about ScyllaDB, retrieves relevant chu
     docker exec -it scylla_rag_app python scylla_rag.py
     ```
 
-
-docker run --rm \
-  -e host=192.168.1.10 \
-  -e port=9042 \
-  my-python-app
-
 ## Links
 * Step-by-step tutorial
 * ScyllaDB Docs

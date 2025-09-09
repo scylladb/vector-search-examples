@@ -1,4 +1,4 @@
-# ScyllaDB vector search sample applicatons
+# ScyllaDB vector search sample applications
 
 This repository contains sample applications demonstrating 
 how to use ScyllaDB for vector search use cases, such as 
