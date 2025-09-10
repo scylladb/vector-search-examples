@@ -16,7 +16,10 @@ class ScyllaRag():
     LANGUAGE_MODEL = "hf.co/bartowski/Llama-3.2-1B-Instruct-GGUF"
     
     def __init__(self):
+        # Ollama running in Docker
         self.ollama_client = Client(host='http://ollama:11434')
+        # Ollama running locally
+        #self.ollama_client = Client()
         print("Downloading models from HuggingFace...")
         self.ollama_client.pull(self.EMBEDDING_MODEL)
         self.ollama_client.pull(self.LANGUAGE_MODEL)
@@ -109,7 +112,7 @@ if __name__ == "__main__":
     scylla_rag = ScyllaRag()
 
     # ingest documents (only needs to run once)
-    # nodes = scylla_rag.create_chunks("../scylladb/docs", files_limit=200)
+    # nodes = scylla_rag.create_chunks("./scylladb/docs", files_limit=200)
     # scylla_rag.vectorize(nodes, target_table="rag.chunks")
     
     while True:
