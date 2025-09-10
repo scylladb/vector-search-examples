@@ -57,7 +57,7 @@ The chatbot allows users to ask questions about ScyllaDB, retrieves relevant chu
         -v ollama:/root/.ollama \
         --name ollama \
         ollama/ollama
-        ```
+    ```
 
 ### 3. RAG app setup
 1. Build image of the rag app:
