@@ -14,3 +14,5 @@ with open(absolute_file_path("schema.cql"), "r") as file:
         if len(query) > 0:
             session.execute(query)
 print("Migration completed.")
+
+client.shutdown()
