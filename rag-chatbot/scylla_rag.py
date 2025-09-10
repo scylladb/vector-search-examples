@@ -9,6 +9,8 @@ from llama_index.core.node_parser import (
 from llama_index.core import SimpleDirectoryReader
 from llama_index.core import Document
 from llama_index.core.schema import BaseNode
+import spacy
+
 
 class ScyllaRag():
     
@@ -17,12 +19,14 @@ class ScyllaRag():
     
     def __init__(self):
         # Ollama running in Docker
-        self.ollama_client = Client(host='http://ollama:11434')
+        #self.ollama_client = Client(host='http://ollama:11434')
         # Ollama running locally
-        #self.ollama_client = Client()
-        print("Downloading models from HuggingFace...")
+        self.ollama_client = Client()
+        print("Downloading models...")
         self.ollama_client.pull(self.EMBEDDING_MODEL)
         self.ollama_client.pull(self.LANGUAGE_MODEL)
+        spacy.cli.download("en_core_web_md")
+        print("Models downloaded.")
 
     def create_embedding_ollama(self, content):
         return self.ollama_client.embed(model=self.EMBEDDING_MODEL, input=content)["embeddings"][0]
