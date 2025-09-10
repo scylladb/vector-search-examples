@@ -27,7 +27,7 @@ Source code is [available on GitHub](https://github.com/scylladb/vector-search-e
 
 ## Set up ScyllaDB as a vector store
 1. Create a new ScyllaDB Cloud instance with `vector search` enabled.
-1. Create `config.py` and add your database connection details (hosts, username, password, etc...):
+1. Update the `config.py` with your database connection details (hosts, username, password, etc...):
     ```py
     SCYLLADB_CONFIG = {
         "hosts": ["node-0.aws-us-east-1.xxxxxxxxxxx.clusters.scylla.cloud",
