@@ -99,6 +99,6 @@ The chatbot allows users to ask questions about ScyllaDB, retrieves relevant chu
     ```
 
 ## Links
-* Step-by-step tutorial
-* ScyllaDB Docs
+* [Step-by-step tutorial](https://vector-search.scylladb.com/stable/rag-chatbot-scylladb.html)
+* [ScyllaDB Docs](https://docs.scylladb.com/stable/)
 
