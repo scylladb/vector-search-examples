@@ -7,7 +7,7 @@ import config
 
 class ScyllaClient():
     
-    def __init__(self):
+    def __init__(self, migrate=False):
         if  os.getenv("scylla_host") is None:
             scylla_config = config.SCYLLADB_CONFIG
         else:
@@ -19,8 +19,12 @@ class ScyllaClient():
                 "keyspace": "rag", # hardcoded for simplicity, might change later
                 "datacenter": os.getenv("scylla_datacenter")
             }
+        
         self.cluster = self._get_cluster(scylla_config)
-        self.session = self.cluster.connect(scylla_config["keyspace"])
+        if migrate:
+            self.session = self.cluster.connect()
+        else:
+            self.session = self.cluster.connect(scylla_config["keyspace"])
         
     def __enter__(self):
         return self

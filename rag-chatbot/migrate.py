@@ -1,7 +1,7 @@
 import os
 from scylladb import ScyllaClient
 
-client = ScyllaClient()
+client = ScyllaClient(migrate=True)
 session = client.get_session()
 
 def absolute_file_path(relative_file_path):
@@ -14,5 +14,3 @@ with open(absolute_file_path("schema.cql"), "r") as file:
         if len(query) > 0:
             session.execute(query)
 print("Migration completed.")
-
-client.shutdown()
