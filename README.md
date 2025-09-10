@@ -10,4 +10,4 @@ retrieval-augmented generation (RAG) and semantic caching.
 ## Useful resources
 * [ScyllaDB Cloud](https://cloud.scylladb.com/)
 * [ScyllaDB Documentation](https://docs.scylladb.com/)
-* Step-by-step tutorials (todo: add link)
+* [Step-by-step tutorials](https://vector-search.scylladb.com/stable/)
