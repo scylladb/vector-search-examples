@@ -6,18 +6,18 @@
 :hide-post-content:
 :landing:
 
-.. title:: Vector search with ScyllaDB
+.. title:: ScyllaDB Vector Search
 
 
 .. hero-box::
-  :title: Vector search with ScyllaDB
+  :title: ScyllaDB Vector Search
   :image: /_static/img/mascots-2/cloud.svg
   :button_icon: icon-github
   :button_url: https://github.com/scylladb/vector-search-examples
   :button_text: Source code
   :button_style: bold
 
-  Learn how you can use ScyllaDB to build RAG applications, semantic caching layers, and how it works together with
+  Learn how you can use ScyllaDB Vector Search to build RAG applications, semantic caching layers, and how it works together with
   popular LLM libraries like LlamaIndex and LangChain.
 
 .. raw:: html
