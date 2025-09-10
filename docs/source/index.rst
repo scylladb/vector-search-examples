@@ -39,35 +39,6 @@
 
   Build a complete retrieval-augmented generation (RAG) chatbot using ScyllaDB as the vector store.
 
-.. topic-box::
-  :title: Semantic Caching
-  :link: semantic-caching-scylladb
-  :icon: icon-creditcard
-  :class: large-4
-  :anchor: Get started
-
-  Build semantic caching layer to speed up LLM queries and reduce costs.
-
-.. topic-box::
-  :title: ScyllaDB + LlamaIndex
-  :link: scylladb-llamaindex
-  :icon: icon-maintenance
-  :class: large-4
-  :anchor: Get started
-
-  See how to use ScyllaDB with LlamaIndex.
-
-
-.. topic-box::
-  :title: ScyllaDB + LangChain
-  :link: scylladb-langchain
-  :icon: icon-database
-  :class: large-4
-  :anchor: Get started
-
-  See how to use ScyllaDB with LangChain.
-
-
 .. raw:: html
 
   </div></div></div>
@@ -77,7 +48,6 @@
    :hidden:
 
    Build a RAG Chatbot <rag-chatbot-scylladb>
-   Build a Semantic Caching Layer <semantic-caching-scylladb>
    GitHub repository <https://github.com/scylladb/vector-search-examples>
 
 
