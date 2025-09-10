@@ -19,14 +19,20 @@ class ScyllaRag():
     
     def __init__(self):
         # Ollama running in Docker
-        #self.ollama_client = Client(host='http://ollama:11434')
+        self.ollama_client = Client(host='http://ollama:11434')
         # Ollama running locally
-        self.ollama_client = Client()
+        #self.ollama_client = Client()
+        
         print("Downloading models...")
+        self.download_models()
+        print("Models downloaded.")
+        
+    def download_models(self):
+        """Download (or just use cache if they have been downloaded already) models from HuggingFace and Spacy.
+        """
         self.ollama_client.pull(self.EMBEDDING_MODEL)
         self.ollama_client.pull(self.LANGUAGE_MODEL)
         spacy.cli.download("en_core_web_md")
-        print("Models downloaded.")
 
     def create_embedding_ollama(self, content):
         return self.ollama_client.embed(model=self.EMBEDDING_MODEL, input=content)["embeddings"][0]
@@ -116,7 +122,7 @@ if __name__ == "__main__":
     scylla_rag = ScyllaRag()
 
     # ingest documents (only needs to run once)
-    # nodes = scylla_rag.create_chunks("./scylladb/docs", files_limit=200)
+    # nodes = scylla_rag.create_chunks("./scylladb/docs", files_limit=200000)
     # scylla_rag.vectorize(nodes, target_table="rag.chunks")
     
     while True:
