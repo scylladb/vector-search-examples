@@ -6,7 +6,7 @@
 :hide-post-content:
 :landing:
 
-.. title:: Scylla feature store example
+.. title:: Vector search with ScyllaDB
 
 
 .. hero-box::
