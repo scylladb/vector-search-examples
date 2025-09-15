@@ -1,0 +1,3 @@
+scylla-driver==3.29.4
+sentence-transformers==5.1.0
+openai==1.107.1
