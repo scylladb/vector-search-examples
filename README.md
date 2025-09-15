@@ -5,7 +5,7 @@ how to use ScyllaDB for vector search use cases, such as
 retrieval-augmented generation (RAG) and semantic caching.
 
 * [Build a RAG chatbot with ScyllaDB](/rag-chatbot/readme.md)
-* Build a semantic caching layer with ScyllaDB
+* [Build a semantic caching layer with ScyllaDB](/semantic-cache/readme.md)
 
 ## Useful resources
 * [ScyllaDB Cloud](https://cloud.scylladb.com/)
