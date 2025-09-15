@@ -6,9 +6,8 @@ Semantic caching allows users to save and reuse answers from past queries, speed
 
 ## Prerequisites
 * Sign up for [ScyllaDB Cloud](https://cloud.scylladb.com/)
-* * OpenAI API key (using [OpenAI](https://openai.com/api/) or [OpenRouter](https://openrouter.ai/))
+* OpenAI API key (using [OpenAI](https://openai.com/api/) or [OpenRouter](https://openrouter.ai/))
 * [Docker](https://docs.docker.com/engine/install/) installed
-* Open
 * Python
 
 ## Setup
