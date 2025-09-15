@@ -77,6 +77,6 @@ Semantic caching allows users to save and reuse answers from past queries, speed
 
 
 ## Links
-* [Step-by-step tutorial](https://vector-search.scylladb.com/stable/rag-chatbot-scylladb.html)
+* [Step-by-step tutorial](https://vector-search.scylladb.com/stable/semantic-cache-scylladb.html)
 * [ScyllaDB Docs](https://docs.scylladb.com/stable/)
 
