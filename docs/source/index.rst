@@ -11,7 +11,7 @@
 
 .. hero-box::
   :title: ScyllaDB Vector Search
-  :image: /_static/img/mascots-2/cloud.svg
+  :image: /_static/img/scylla-vector-flipped.png
   :button_icon: icon-github
   :button_url: https://github.com/scylladb/vector-search-examples
   :button_text: Source code
@@ -39,6 +39,15 @@
 
   Build a complete retrieval-augmented generation (RAG) chatbot using ScyllaDB as the vector store.
 
+.. topic-box::
+  :title: Semantic Cache
+  :link: semantic-cache-scylladb
+  :icon: icon-play-circle
+  :class: large-4
+  :anchor: Get started
+
+  Build a semantic caching app using ScyllaDB as the vector store.
+
 .. raw:: html
 
   </div></div></div>
@@ -48,6 +57,7 @@
    :hidden:
 
    Build a RAG Chatbot <rag-chatbot-scylladb>
+   Build a Semantic Cache <semantic-cache-scylladb>
    GitHub repository <https://github.com/scylladb/vector-search-examples>
 
 
