@@ -43,6 +43,7 @@ class ScyllaSemanticCacheApp:
         if len(results) > 0:
             cached_response = results[0]
             similarity = self.calc_cosine_similarity(embedding, cached_response['prompt_embedding'])
+            print("Similarity score:", similarity)
             if similarity >= threshold:
                 return cached_response['llm_response']
         return None
@@ -84,10 +85,10 @@ if __name__ == "__main__":
     question = "What is the capital city of France?"
     print("Question 1:", question)
     answer = app.semantic_cached_prompt(question)
-    print("\nAnswer (comes from LLM):", answer)
+    print("Answer:", answer)
     
     # response comes from cache
     question = "What's the capital of France?"
     print("\nQuestion 2:", question)
     answer = app.semantic_cached_prompt(question)
-    print("\nAnswer (comes from cache):", answer)
+    print("Answer:", answer)
