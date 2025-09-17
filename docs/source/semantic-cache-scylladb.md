@@ -8,6 +8,7 @@ Source code is [available on GitHub](https://github.com/scylladb/vector-search-e
 
 ## Prerequisites
 * [ScyllaDB Cloud account](https://cloud.scylladb.com/)
+* OpenAI API key (using [OpenAI](https://openai.com/api/) or [OpenRouter](https://openrouter.ai/))
 * [Python 3.9 or newer](https://www.python.org/downloads/)
 
 ## Install Python requirements
