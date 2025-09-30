@@ -18,14 +18,3 @@ class MovieRecommender:
         values = [user_query_embedding, top_k]
         results = db_client.query_data(db_query, values)
         return [Movie(**row) for row in results]
-    
-if __name__ == "__main__":
-    recommender = MovieRecommender()
-    user_query = "Time travelling"
-    print(f"User query: {user_query}")
-    
-    movies = recommender.similar_movies("recommend.movies", user_query, top_k=5)
-    movie_plots = "\n\n".join([movie["plot"] for movie in movies])
-    movie_titles = "\n".join([f'{movie["title"]} (id: {movie["id"]})' for movie in movies])
-    
-    print(f"\nRetrieved movies:\n{movie_titles}\n")
