@@ -1,9 +1,11 @@
 # ScyllaDB Vector Search sample applications
 
 This repository contains sample applications demonstrating 
-how to use ScyllaDB for vector search use cases, such as 
-retrieval-augmented generation (RAG) and semantic caching.
+how to use ScyllaDB for vector search use cases and
+more complex LLM apps such as retrieval-augmented generation
+(RAG) and semantic caching.
 
+* [Build a vector search app with ScyllaDB](/movie-recommendation/readme.md)
 * [Build a RAG chatbot with ScyllaDB](/rag-chatbot/readme.md)
 * [Build a semantic caching layer with ScyllaDB](/semantic-cache/readme.md)
 
