@@ -31,6 +31,15 @@
   <div class="grid-x grid-margin-x">
 
 .. topic-box::
+  :title: Movie recommendation
+  :link: movie-recommendation
+  :icon: icon-play-circle
+  :class: large-4
+  :anchor: Get started
+
+  Build your first vector search application with ScyllaDB: a movie recommendation app.
+
+.. topic-box::
   :title: RAG Chatbot
   :link: rag-chatbot-scylladb
   :icon: icon-play-circle
@@ -56,6 +65,7 @@
    :maxdepth: 3
    :hidden:
 
+   Build a Vector Search app <movie-recommendation>
    Build a RAG Chatbot <rag-chatbot-scylladb>
    Build a Semantic Cache <semantic-cache-scylladb>
    GitHub repository <https://github.com/scylladb/vector-search-examples>
