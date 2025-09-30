@@ -43,7 +43,7 @@ You'll build a simple movie recommendation app that takes a text input from the 
     streamlit run app.py
     ```
 
-![movies app](_static/img/recommend_movies.png)
+![movies app](../docs/source/_static/img/recommend_movies.png)
 
 ## Models
 * embedding model (runs locally): [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
