@@ -43,7 +43,7 @@ def display_best_match(best_match: Movie):
         
 def display_more_recommendations(movies: list[Movie]):
     cols = st.columns(3)
-    for i, movie in enumerate(movies[1:]):
+    for i, movie in enumerate(movies):
         with cols[i % 3]:
             poster = movie.poster_url
             show_poster(poster)
