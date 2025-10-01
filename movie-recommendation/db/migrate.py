@@ -1,7 +1,7 @@
 import os
 from scylladb import ScyllaClient
 
-client = ScyllaClient(migrate=True)
+client = ScyllaClient()
 session = client.get_session()
 
 def absolute_file_path(relative_file_path):
