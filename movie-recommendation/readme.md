@@ -21,7 +21,7 @@ You'll build a simple movie recommendation app that takes a text input from the 
     ```
 1. Install requirements:
     ```sh
-    pip install requirements.txt
+    pip install -r requirements.txt
     ```
 1. Open `config.py` and add your database credentials:
     ```py
@@ -33,6 +33,10 @@ You'll build a simple movie recommendation app that takes a text input from the 
         "datacenter": "AWS_US_EAST_1",
         "keyspace": "recommend"
     }
+    ```
+1. Run the migration script to create a new keyspace and tables:
+    ```sh
+    python db/migrate.py 
     ```
 1. Ingest sample data (100k movies from this [dataset](https://www.kaggle.com/datasets/asaniczka/tmdb-movies-dataset-2023-930k-movies/)):
     ```sh
