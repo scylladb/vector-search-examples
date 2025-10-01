@@ -180,7 +180,7 @@ ScyllaDB acts as a persistent storage for your embeddings and an efficient vecto
     ```
 1. Create a module that recommends similar movies using vector search. Call it `recommender.py`:
     ```py
-    from db.scylladb import ScyllaClient
+    from scylladb import ScyllaClient
     from embedding_creator import EmbeddingCreator
     from models import Movie
         
