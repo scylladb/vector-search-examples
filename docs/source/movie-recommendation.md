@@ -2,6 +2,8 @@
 
 This tutorial shows you how to build a vector search application with ScyllaDB.
 
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/dHJqoPqzCbY?si=f1Yq5fMelYAbuTBt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+
 You'll build a simple movie recommendation app that takes a text input from the user and performs vector search to recommend a movie to watch.
 
 Source code is [available on GitHub](https://github.com/scylladb/vector-search-examples/tree/main/movie-recommendation).
