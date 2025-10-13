@@ -38,7 +38,7 @@ You'll build a simple movie recommendation app that takes a text input from the 
     ```sh
     python db/migrate.py 
     ```
-1. Ingest sample data (100k movies from this [dataset](https://www.kaggle.com/datasets/asaniczka/tmdb-movies-dataset-2023-930k-movies/)):
+1. Ingest sample data (~30k movies from this [dataset](https://www.kaggle.com/datasets/asaniczka/tmdb-movies-dataset-2023-930k-movies/)):
     ```sh
     python ingest.py
     ```
