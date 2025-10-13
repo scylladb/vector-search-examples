@@ -9,7 +9,7 @@ SCYLLADB_CONFIG = {
     "keyspace": "recommend"
 }
 
-running_on_streamlit_cloud = bool(os.getenv("ON_STREAMLIT_CLOUD"))
+running_on_streamlit_cloud = os.getenv("ON_STREAMLIT_CLOUD")
 if running_on_streamlit_cloud.lower() == "true":
     SCYLLADB_CONFIG = {
         "host": os.getenv("SCYLLADB_HOST"),
