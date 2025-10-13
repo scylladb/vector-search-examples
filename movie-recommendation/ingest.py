@@ -38,14 +38,14 @@ class MovieLoader:
         except (SyntaxError) as e:
             raise SyntaxError(f"Error parsing plot_embedding: {e}")
     
-    def string_to_date(self, s: str) -> datetime:
+    def _string_to_date(self, s: str) -> datetime:
         """Convert string to datetime object."""
         try:
             return datetime.strptime(s, self.DATE_FORMAT)
         except ValueError as e:
             raise ValueError(f"Error parsing release_date: {e}")
     
-    def row_is_valid(self, row: dict) -> bool:
+    def _row_is_valid(self, row: dict) -> bool:
         """Check if a row has valid data. Include checks for:
         
         - date is the correct format
@@ -60,12 +60,12 @@ class MovieLoader:
         with open(csv_file, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
-                if not self.row_is_valid(row): # skip row if it's not valud
+                if not self._row_is_valid(row): # skip row if it's not valud
                     continue
                 plot_embedding = self.string_to_float_list(row["plot_embedding"])
                 data = {
                     "id": int(row["id"]),
-                    "release_date": self.string_to_date(row["release_date"]),
+                    "release_date": self._string_to_date(row["release_date"]),
                     "title": row["title"],
                     "tagline": row["tagline"],
                     "genre": row["genres"],
