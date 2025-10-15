@@ -16,13 +16,14 @@ st.subheader("ScyllaDB Vector Search DEMO")
 st.markdown("Source code: https://github.com/scylladb/vector-search-examples/tree/main/movie-recommendation")
 
 # Input area
-col1, col2 = st.columns([3, 1])
-with col1:
-    user_query = st.text_input("What kind of movie are you looking for?",placeholder="e.g. time travelling")
-with col2:
-    top_k = st.number_input("Number of recommendations", min_value=3, max_value=15, value=4, step=1)
+with st.form("search_form", clear_on_submit=False):
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        user_query = st.text_input("What kind of movie are you looking for?",placeholder="e.g. time travelling")
+    with col2:
+        top_k = st.number_input("Number of recommendations", min_value=3, max_value=15, value=4, step=1)
 
-search_button = st.button("Get Recommendations", width="stretch")
+    search_button = st.form_submit_button("Get Recommendations", width="stretch")
 
 def show_poster(poster: str) -> str:
     if poster:
@@ -66,8 +67,8 @@ def display_search_results():
             st.error("❌ No similar movies found.")
 
 if search_button:
-    if not user_query:
-        st.warning("⚠️ Please enter a movie to get recommendations.")
+    if not user_query or not user_query.strip():
+        st.warning("⚠️ Please enter some text to get recommendations.")
     else:
         try:
             display_search_results()
