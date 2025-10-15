@@ -1,6 +1,6 @@
 import streamlit as st
 from llm_provider import LLMProvider
-
+from movie_rag import MovieRAG
 
 st.set_page_config(
     page_title="Database Stories with ScyllaDB",
@@ -74,7 +74,6 @@ if "llm_provider" not in st.session_state:
     st.session_state.llm_provider = LLMProvider()
     
 if "movie_rag" not in st.session_state:
-    from movie_rag import MovieRAG
     st.session_state.movie_rag = MovieRAG()
     
 for message in st.session_state.messages:
