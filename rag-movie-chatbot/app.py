@@ -1,6 +1,5 @@
 import streamlit as st
 from llm_provider import LLMProvider
-from movie_rag import MovieRAG
 
 
 st.set_page_config(
@@ -26,7 +25,7 @@ Treat ScyllaDB as the protagonist — a fast, high-performant database
 system designed to handle massive workloads. Keep the spirit and structure of
 the movie, but make it fit the database world.
 Don't mention any other specific databases by name. 
-Response should less than 40 words The plot: {plot}"""
+Response should be less than 40 words The plot: {plot}"""
 
 def show_poster(poster: str) -> str:
     if poster:
@@ -75,6 +74,7 @@ if "llm_provider" not in st.session_state:
     st.session_state.llm_provider = LLMProvider()
     
 if "movie_rag" not in st.session_state:
+    from movie_rag import MovieRAG
     st.session_state.movie_rag = MovieRAG()
     
 for message in st.session_state.messages:
