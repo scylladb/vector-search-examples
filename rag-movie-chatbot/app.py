@@ -2,8 +2,21 @@ import streamlit as st
 from llm_provider import LLMProvider
 from movie_rag import MovieRAG
 
-st.title("Every story is a database story.")
-st.subheader("Provide a movie plot and I'll turn it into a database story:)")
+
+st.set_page_config(
+    page_title="Database Stories with ScyllaDB",
+    page_icon="🎬",
+    layout="centered",
+    initial_sidebar_state="collapsed"
+)
+
+# Header with emojis and clean styling
+st.markdown("# 💫 Transform movie plots into ScyllaDB adventures")
+st.write("""Example ScyllaDB Vector Search RAG application\n
+GitHub: https://github.com/scylladb/vector-search-examples/tree/main/rag-movie-chatbot
+""")
+
+st.divider()
 
 
 llm_context_prompt = """
@@ -13,15 +26,18 @@ Treat ScyllaDB as the protagonist — a fast, high-performant database
 system designed to handle massive workloads. Keep the spirit and structure of
 the movie, but make it fit the database world.
 Don't mention any other specific databases by name. 
-Response should 50 words or less. The plot: {plot}"""
+Response should less than 40 words The plot: {plot}"""
 
 def show_poster(poster: str) -> str:
     if poster:
         base_url = "https://image.tmdb.org/t/p/original"
         url = f"{base_url}{poster}"
-        st.image(url, width=200)
+        # Center the image using columns
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.image(url, width=200)
     else:
-        st.caption("Poster not found")
+        st.warning("🚫 Poster not available")
 
 def get_all_messages():
     return [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]
@@ -41,14 +57,16 @@ def process_movie_plot(plot_text):
         messages.append({"role": "system", "content": context_prompt})
         response = st.session_state.llm_provider.generate_response(messages)
         stream_response = st.write_stream(response)
-        st.markdown(f"**Referenced movie:** `{rag_results[0].title}`", )
-        show_poster(rag_results[0].poster_url)
+        
+        with st.container():
+            st.success(f"**Referenced Movie:** {rag_results[0].title}")
+            show_poster(rag_results[0].poster_url)
     
     st.session_state.messages.append({"role": "assistant", "content": stream_response})
 
 
 if "scylla_icon_img" not in st.session_state:
-    st.session_state.scylla_icon_img = "https://sphinx-theme.scylladb.com/_static/img/mascots-2/forward.svg"
+    st.session_state.scylla_icon_img = "https://sphinx-theme.scylladb.com/_static/img/mascots-2/default.svg"
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -58,13 +76,17 @@ if "llm_provider" not in st.session_state:
     
 if "movie_rag" not in st.session_state:
     st.session_state.movie_rag = MovieRAG()
-
+    
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if user_movie_plot := st.chat_input("Enter a random movie plot. E.g: Rebels flee, Vader reveals shocking truth"):
+# Chat input
+if user_movie_plot := st.chat_input("✨ Enter any movie plot... (e.g: Rebels flee, Vader reveals shocking truth)"):
     process_movie_plot(user_movie_plot)
+
+# Example plots section
+st.markdown("## Try these examples")
 
 example_plots = [
     "Harry Potter defeats Voldemort",
