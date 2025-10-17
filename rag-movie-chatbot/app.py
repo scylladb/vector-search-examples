@@ -21,11 +21,10 @@ st.divider()
 llm_context_prompt = """
 Rewrite the following movie plot as if it were a story 
 about a low-latency database named ScyllaDB. 
-Treat ScyllaDB as the protagonist — a fast, high-performant database
-system designed to handle massive workloads. Keep the spirit and structure of
+Treat ScyllaDB as the protagonist. Keep the spirit and structure of
 the movie, but make it fit the database world.
 Don't mention any other specific databases by name. 
-Response should be less than 40 words The plot: {plot}"""
+Do not produce more than 100 words. The plot: {plot}"""
 
 def show_poster(poster: str) -> str:
     if poster:
