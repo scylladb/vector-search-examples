@@ -1,5 +1,5 @@
 CREATE KEYSPACE rag WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'}
-AND TABLETS = {'enabled': 'false'};
+AND TABLETS = {'enabled': 'true'};
 
 CREATE TABLE rag.chunks (
     chunk_id UUID PRIMARY KEY,

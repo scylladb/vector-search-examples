@@ -1,5 +1,5 @@
 CREATE KEYSPACE recommend WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'}
-AND TABLETS = {'enabled': 'false'};
+AND TABLETS = {'enabled': 'true'};
 
 CREATE TABLE recommend.movies (
     id INT,
