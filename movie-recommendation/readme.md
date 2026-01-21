@@ -7,6 +7,7 @@ You'll build a simple movie recommendation app that takes a text input from the 
 ## Prerequisites
 * Sign up for [ScyllaDB Cloud](https://cloud.scylladb.com/)
 * Python 3.9+
+* [UV package manager](https://docs.astral.sh/uv/)
 
 ## Get started
 1. Launch a new ScyllaDB cluster with `vector search` enabled
@@ -15,36 +16,34 @@ You'll build a simple movie recommendation app that takes a text input from the 
     git clone https://github.com/scylladb/vector-search-examples.git
     cd vector-search-examples/movie-recommendation
     ```
-1. Create and activate a new Python virtual environment (you can use [virtualenv](https://virtualenv.pypa.io/en/latest/), [Poetry](https://python-poetry.org/docs/), [venv](https://docs.python.org/3/library/venv.html) or any other environment management library):
-    ```
-    virtualenv env && source env/bin/activate
-    ```
-1. Install requirements:
+1. Install dependencies using UV:
     ```sh
-    pip install -r requirements.txt
+    uv sync
     ```
-1. Open `config.py` and add your database credentials:
-    ```py
-    SCYLLADB_CONFIG = {
-        "host": "node-0.aws-us-east-1.xxxxxxx.clusters.scylla.cloud",
-        "port": "9042",
-        "username": "scylla",
-        "password": "xxxxxxxxx",
-        "datacenter": "AWS_US_EAST_1",
-        "keyspace": "recommend"
-    }
+1. Create a `.env` file from the example and add your database credentials:
+    ```sh
+    cp .env.example .env
+    ```
+    Then edit `.env` with your ScyllaDB cluster details:
+    ```env
+    SCYLLADB_HOST=node-0.aws-us-east-1.xxxxxxx.clusters.scylla.cloud
+    SCYLLADB_PORT=9042
+    SCYLLADB_USERNAME=scylla
+    SCYLLADB_PASSWORD=xxxxxxxxx
+    SCYLLADB_DATACENTER=AWS_US_EAST_1
+    SCYLLADB_KEYSPACE=recommend
     ```
 1. Run the migration script to create a new keyspace and tables:
     ```sh
-    python db/migrate.py 
+    uv run python db/migrate.py 
     ```
 1. Ingest sample data (~30k movies from this [dataset](https://www.kaggle.com/datasets/asaniczka/tmdb-movies-dataset-2023-930k-movies/)):
     ```sh
-    python ingest.py
+    uv run python ingest.py
     ```
 1. Run the app:
     ```sh
-    streamlit run app.py
+    uv run streamlit run app.py
     ```
 
 ![movies app](../docs/source/_static/img/recommend_movies.png)
