@@ -1,14 +1,13 @@
 [project]
 name = "movie-recommendation"
 version = "0.1.0"
-description = "ScyllaDB Vector Search movie recommendation example"
-readme = "readme.md"
-requires-python = ">=3.9"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
 dependencies = [
-    "scylla-driver==3.29.4",
-    "sentence-transformers==5.1.1",
-    "streamlit==1.50.0",
-    "pydantic==2.11.9",
-    "psutil==7.1.0",
-    "python-dotenv>=1.0.0",
+    "psutil>=7.2.1",
+    "python-dotenv>=1.2.1",
+    "scylla-driver>=3.29.7",
+    "sentence-transformers>=5.2.0",
+    "streamlit>=1.53.0",
 ]
