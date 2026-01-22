@@ -111,9 +111,6 @@ movie-recommendation/
 └── Dockerfile               # Container configuration
 ```
 
-### Tech stack
-* 
-
 
 ## Links
 * [Step-by-step tutorial](https://vector-search.scylladb.com/stable/movie-recommendation.html)
