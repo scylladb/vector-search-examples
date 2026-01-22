@@ -1,10 +1,11 @@
 import csv
 from datetime import datetime
 from db.scylla_loader import ScyllaLoader
-from config import SCYLLADB_CONFIG
 import os
 import ast
+from dotenv import load_dotenv
 
+load_dotenv()
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 class MovieLoader:
@@ -15,9 +16,9 @@ class MovieLoader:
         loader = ScyllaLoader()
         loader.ingest_data(
             data=data,
-            address=SCYLLADB_CONFIG["host"],
-            keyspace=SCYLLADB_CONFIG["keyspace"],
-            dc=SCYLLADB_CONFIG["datacenter"],
+            address=os.getenv("SCYLLADB_HOST"),
+            keyspace=os.getenv("SCYLLADB_KEYSPACE", "recommend"),
+            dc=os.getenv("SCYLLADB_DATACENTER"),
             table="movies",
         )
 
