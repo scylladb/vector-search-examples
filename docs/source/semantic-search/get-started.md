@@ -27,7 +27,7 @@ cp .env.example .env
 ```
 
 Edit `.env` and add your ScyllaDB Cloud credentials:
-```env
+```
 SCYLLADB_HOST=node-0.aws-us-east-1.xxxxxxxx.clusters.scylla.cloud
 SCYLLADB_PORT=9042
 SCYLLADB_USERNAME=scylla
@@ -111,7 +111,7 @@ https://github.com/scylladb/vector-search-examples/tree/main/movie-recommendatio
 ## Understanding the database schema
 When you run the Docker container, the migration script automatically creates the database schema. Here's what gets created in your ScyllaDB cluster:
 
-```sql
+```cql
 CREATE KEYSPACE IF NOT EXISTS example_ks 
 WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'}
 AND TABLETS = {'enabled': 'true'};
@@ -147,7 +147,7 @@ WITH OPTIONS = { 'similarity_function': 'DOT_PRODUCT' };
 - `cdc = {'enabled': 'true'}` - Enables Change Data Capture for streaming changes
 
 **Vector Index:**
-```sql
+```cql
 CREATE INDEX IF NOT EXISTS ann_index ON example_ks.movies(plot_embedding) 
 USING 'vector_index'
 WITH OPTIONS = { 'similarity_function': 'DOT_PRODUCT' };

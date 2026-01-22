@@ -299,7 +299,7 @@ Go ahead and run streamlit:
 ```py
 streamlit run app.py
 ```
-![movies app](_static/img/movies.png)
+![movies app](../_static/img/movies.png)
 
 ## Insert sample data
 Now that ScyllaDB is properly set up and your vector search module and Streamlit app are running smoothly, let's insert some sample data (100k movies from this [dataset](https://www.kaggle.com/datasets/asaniczka/tmdb-movies-dataset-2023-930k-movies/)) so you can start exploring your app.
@@ -357,7 +357,7 @@ python ingest.py
 ⏳ Ingestion started...
 ```
 
-![movies app](_static/img/recommend_movies.png)
+![movies app](../_static/img/recommend_movies.png)
 
 The complete application is available on [GitHub](https://github.com/scylladb/vector-search-examples/tree/main/movie-recommendation).
 

@@ -63,12 +63,12 @@
   
 
 .. toctree::
-   :maxdepth: 3
+   :titlesonly:
+   :hidden:
    
    semantic-search/index
    rag/index
    semantic-cache/index
-   integrations/index
 
 
 
