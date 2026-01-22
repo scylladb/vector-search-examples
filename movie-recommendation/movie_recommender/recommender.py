@@ -1,6 +1,6 @@
 from db.scylladb import ScyllaClient
-from embedding_creator import EmbeddingCreator
-from models import Movie
+from movie_recommender.embedding_creator import EmbeddingCreator
+from movie_recommender.models import Movie
     
 class MovieRecommender:
     

@@ -1,6 +1,6 @@
 import streamlit as st
-from recommender import MovieRecommender
-from models import Movie
+from movie_recommender.recommender import MovieRecommender
+from movie_recommender.models import Movie
 
 recommender = MovieRecommender()
 

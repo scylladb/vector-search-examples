@@ -42,9 +42,52 @@ You'll build a simple movie recommendation app that takes a text input from the 
     uv run python ingest.py
     ```
 1. Run the app:
+    
+    **Option A: Streamlit UI**
     ```sh
-    uv run streamlit run app.py
+    uv run streamlit run streamlit_ui.py
     ```
+    
+    **Option B: FastAPI Server**
+    ```sh
+    uv run uvicorn main:app --reload --port 8000
+    ```
+    API will be available at `http://localhost:8000`
+    - Interactive docs: `http://localhost:8000/docs`
+    - Health check: `http://localhost:8000/health`
+
+## API Usage
+
+**Endpoint:** `POST /api/v1/recommend`
+
+**Request:**
+```bash
+curl -X POST "http://localhost:8000/api/v1/recommend" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "a movie about space exploration",
+    "top_k": 5
+  }'
+```
+
+**Response:**
+```json
+{
+  "movies": [
+    {
+      "id": 123,
+      "title": "Interstellar",
+      "release_date": "2014-11-07T00:00:00",
+      "tagline": "Mankind was born on Earth. It was never meant to die here.",
+      "genre": "Science Fiction",
+      "poster_url": "/poster.jpg",
+      "imdb_id": "tt0816692",
+      "plot": "A team of explorers travel through a wormhole..."
+    }
+  ],
+  "count": 5
+}
+```
 
 ![movies app](../docs/source/_static/img/recommend_movies.png)
 
