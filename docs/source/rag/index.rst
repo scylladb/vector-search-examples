@@ -1,5 +1,5 @@
 Retrieval-Augmented Generation (RAG)
-==============
+=====================================
 
 .. toctree::
    :maxdepth: 1

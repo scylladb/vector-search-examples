@@ -1,5 +1,5 @@
 Semantic Search
-==============
+================
 
 .. toctree::
    :maxdepth: 1
