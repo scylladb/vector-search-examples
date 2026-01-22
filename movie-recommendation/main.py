@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from movie_recommender.recommender import MovieRecommender
 from routers import movies
@@ -30,6 +31,10 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
 
 @app.get("/health")
 async def health_check():
@@ -38,4 +43,4 @@ async def health_check():
 
 
 # Include routers
-app.include_router(movies.router, prefix="/api/v1", tags=["recommendations"])
+app.include_router(movies.router, tags=["recommendations"])

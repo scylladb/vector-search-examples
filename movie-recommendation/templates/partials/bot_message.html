@@ -1,0 +1,17 @@
+<div
+  hx-ext="sse"
+  sse-connect="/generate-story/stream?query={{ query }}&top_k={{ top_k }}"
+  sse-close="done"
+  x-data="{thinking: true}"
+  @htmx:sse-open="thinking = false;"
+ >
+  <!-- Movie info will appear here TODO-->
+
+  <!-- Story content will stream here -->
+  <p x-show="thinking" class="italic text-gray-400 pulse">
+   Thinking...
+  </p>
+  <p x-ref="story" sse-swap="content" hx-swap="beforeend">
+
+  </p>
+</div>

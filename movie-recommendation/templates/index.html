@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scylla Movie Bot</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="/static/vendor/js/htmx-2.0.7.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/htmx-ext-sse@2.2.4"
+      integrity="sha384-A986SAtodyH8eg8x8irJnYUk7i9inVQqYigD6qZ9evobksGNIXfeFvDwLSHcp31N"
+      crossorigin="anonymous"></script>
+    <script defer src="/static/vendor/js/alpine.min.js"></script>
+    <style>
+      body {
+        background-color: #1a202e;
+      }
+
+      .chat-container {
+        background-color: #242b3d;
+        border: 1px solid #2d3548;
+      }
+
+      .github-link {
+        background-color: #2d3548;
+      }
+
+      .bot-message {
+        background-color: #2d3548;
+      }
+
+      .quick-option {
+        background-color: #2d3548;
+        border: 1px solid #374151;
+      }
+
+      .quick-option:hover {
+        background-color: #374151;
+      }
+      .pulse {
+        animation: pulse 1s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+    </style>
+  </head>
+  <body class="h-screen flex flex-col items-center justify-center px-4 py-8 overflow-hidden">
+    <div class="w-full max-w-5xl h-full flex flex-col">
+      <!-- Header -->
+      <header class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-white mb-2">Scylla Movie Bot</h1>
+        <p class="text-gray-400 mb-4">ScyllaDB Vector Search RAG example</p>
+
+        <!-- GitHub Link -->
+        <div
+          class="inline-flex items-center gap-2 github-link px-4 py-2 rounded-lg">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+          </svg>
+          <span class="text-sm">git clone <a target="_blank" href="https://github.com/scylladb/chatbot-demo">
+              https://github.com/scylladb/chatbot-demo
+            </a>
+          </span>
+        </div>
+      </header>
+
+      <!-- Chat Container -->
+      <div x-data="chatBotApp()" class="chat-container rounded-2xl p-6 flex-1 flex flex-col min-h-0">
+        <div class="chat-messages flex-1 overflow-y-auto min-h-0">
+          <template x-for="msg in messages">
+            <div class="flex gap-3 mb-6">
+              <!-- bot icon -->
+              <template x-if="msg.type === 'bot'">
+                <div
+                  class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <img
+                    src="/static/scylla-mascot.svg"
+                    alt="ScyllaDB Logo"
+                    class="w-6 h-6" />
+                </div>
+              </template>
+              <!-- /bot icon -->
+              <!-- message container -->
+              <div
+                class="rounded-lg px-4 py-3 flex-1"
+                :class="[msg.type + '-message', msg.type === 'user' ? 'bg-[#374151] text-right' : '']">
+                <div
+                  :class="msg.type === 'bot' ? 'bot-message-content' : 'user-message-content'"
+                  x-text="msg.content"></div>
+              </div>
+              <!-- /message container -->
+
+              <!-- user icon -->
+              <template x-if="msg.type === 'user'">
+                <div
+                  class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg
+                    class="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <circle
+                      cx="12"
+                      cy="8"
+                      r="4"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      fill="none" />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                  </svg>
+                </div>
+              </template>
+              <!-- /user icon -->
+            </div>
+          </template>
+        </div>
+
+        <!-- Quick Options Row -->
+        <div class="flex flex-row gap-3 mb-3">
+          <button
+            class="quick-option px-4 py-2 rounded-lg text-gray-300 text-sm hover:text-white transition-colors"
+            x-text="inputExamples[0]"
+            @click="handleSend(inputExamples[0]);"></button>
+          <button
+            class="quick-option px-4 py-2 rounded-lg text-gray-300 text-sm hover:text-white transition-colors"
+            x-text="inputExamples[1]"
+            @click="handleSend(inputExamples[1]);"></button>
+          <button
+            class="quick-option px-4 py-2 rounded-lg text-gray-300 text-sm hover:text-white transition-colors"
+            x-text="inputExamples[2]"
+            @click="handleSend(inputExamples[2]);"></button>
+        </div>
+
+        <!-- Input Area -->
+        <div class="flex flex-col gap-1">
+          <div class="flex gap-3">
+            <input
+              type="text"
+              name="query"
+              placeholder="Enter a movie plot or select a quick option..."
+              class="input input-bordered flex-1 bg-[#1a202e] border-[#374151] text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none"
+              x-model="userInput"
+              x-ref="userInput"
+              @keyup.enter.prevent="handleSend(userInput);" />
+            <input type="hidden" name="top_k" value="1" />
+            <button
+              class="btn bg-cyan-500 hover:bg-cyan-600 text-white border-none px-8"
+              @click="handleSend(userInput);"
+              hx-get="/start-sse"
+              hx-include="input[name='query'], input[name='top_k']"
+              hx-target="previous .bot-message-content"
+              hx-trigger="ui-ready from:window"
+              hx-swap="outerHTML">
+              Send
+            </button>
+          </div>
+          <div class="text-xs text-red-500 mt-1 text-left min-h-[1.2em]"
+            x-ref="errorMessage" 
+            x-show="false">
+            Please enter at least 3 characters.
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      htmx.logAll();
+    </script>
+    <script src="static/app.js?v={{ range(1, 10000) | random }}"></script>
+  </body>
+</html>
