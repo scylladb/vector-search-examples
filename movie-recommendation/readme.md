@@ -50,49 +50,66 @@ You'll build a simple movie recommendation app that takes a text input from the 
     
     **Option B: FastAPI Server**
     ```sh
-    uv run uvicorn main:app --reload --port 8000
+    uv run uvicorn src.main:app --reload --port 8000
     ```
     API will be available at `http://localhost:8000`
     - Interactive docs: `http://localhost:8000/docs`
     - Health check: `http://localhost:8000/health`
 
-## API Usage
+## Docker deployment
 
-**Endpoint:** `POST /api/v1/recommend`
+To run the application in Docker:
 
-**Request:**
-```bash
-curl -X POST "http://localhost:8000/api/v1/recommend" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "query": "a movie about space exploration",
-    "top_k": 5
-  }'
+1. Generate `requirements.txt` from the lock file:
+    ```sh
+    uv pip compile pyproject.toml -o requirements.txt
+    ```
+
+2. Build the Docker image:
+    ```sh
+    docker build -t movie-recommendation .
+    ```
+
+3. Run the container:
+    ```sh
+    docker run -p 8000:8000 --env-file .env --name movie-container movie-recommendation
+    ```
+
+## Development
+
+### Project Structure
+```
+movie-recommendation/
+├── src/
+│   ├── main.py              # FastAPI application
+│   ├── routers/             # Endpoints
+│   ├── movie_recommender/   # Recommendation engine (vector search)
+│   ├── db/                  # ScyllaDB client and migration scripts
+│   ├── templates/           # Jinja2 HTML templates
+│   └── static/              # Static assets (JS, CSS, images)
+├── streamlit_ui.py          # Streamlit interface (optional)
+├── schemas.py               # Pydantic models for FastAPI
+├── pyproject.toml           # Project dependencies (UV)
+└── Dockerfile               # Container configuration
 ```
 
-**Response:**
-```json
-{
-  "movies": [
-    {
-      "id": 123,
-      "title": "Interstellar",
-      "release_date": "2014-11-07T00:00:00",
-      "tagline": "Mankind was born on Earth. It was never meant to die here.",
-      "genre": "Science Fiction",
-      "poster_url": "/poster.jpg",
-      "imdb_id": "tt0816692",
-      "plot": "A team of explorers travel through a wormhole..."
-    }
-  ],
-  "count": 5
-}
+### Running in Development Mode
+```sh
+# Install dependencies
+uv sync
+
+# Run FastAPI with auto-reload
+uv run uvicorn src.main:app --reload --port 8000
+
+# Or run Streamlit
+uv run streamlit run streamlit_ui.py
 ```
+
 
 ![movies app](../docs/source/_static/img/recommend_movies.png)
 
 ## Models
-* embedding model (runs locally): [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
+* default embedding model (runs locally): [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
 
 ## Links
 * [Step-by-step tutorial](https://vector-search.scylladb.com/stable/movie-recommendation.html)
