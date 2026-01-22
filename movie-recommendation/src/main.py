@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
-from movie_recommender.recommender import MovieRecommender
-from routers import movies
+from pathlib import Path
+from .movie_recommender.recommender import MovieRecommender
+from .routers import movies
 
 
 @asynccontextmanager
@@ -32,7 +33,8 @@ app = FastAPI(
 )
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+STATIC_DIR = Path(__file__).parent / "static"
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
 

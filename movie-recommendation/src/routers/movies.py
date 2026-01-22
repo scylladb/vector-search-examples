@@ -1,15 +1,17 @@
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
+from pathlib import Path
 from schemas import RecommendRequest, RecommendResponse, MovieResponse
 import logging
 import json
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+#logging.basicConfig(level=logging.INFO)
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
+TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 
 @router.post("/recommend", response_model=RecommendResponse)
