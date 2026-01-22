@@ -1,7 +1,7 @@
-CREATE KEYSPACE recommend WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'}
+CREATE KEYSPACE IF NOT EXISTS example_ks WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'}
 AND TABLETS = {'enabled': 'true'};
 
-CREATE TABLE recommend.movies (
+CREATE TABLE IF NOT EXISTS example_ks.movies (
     id INT,
     release_date TIMESTAMP,
     title TEXT,
@@ -15,6 +15,6 @@ CREATE TABLE recommend.movies (
 ) WITH cdc = {'enabled': 'true'};
 
 
-CREATE INDEX IF NOT EXISTS ann_index ON recommend.movies(plot_embedding) 
+CREATE INDEX IF NOT EXISTS ann_index ON example_ks.movies(plot_embedding) 
 USING 'vector_index'
 WITH OPTIONS = { 'similarity_function': 'DOT_PRODUCT' };

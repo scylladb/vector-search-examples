@@ -1,10 +1,11 @@
 import csv
 from datetime import datetime
 from db.scylla_loader import ScyllaLoader
-from config import SCYLLADB_CONFIG
 import os
 import ast
+from dotenv import load_dotenv
 
+load_dotenv()
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 class MovieLoader:
@@ -15,9 +16,9 @@ class MovieLoader:
         loader = ScyllaLoader()
         loader.ingest_data(
             data=data,
-            address=SCYLLADB_CONFIG["host"],
-            keyspace=SCYLLADB_CONFIG["keyspace"],
-            dc=SCYLLADB_CONFIG["datacenter"],
+            address=os.getenv("SCYLLADB_HOST"),
+            keyspace=os.getenv("SCYLLADB_KEYSPACE"),
+            dc=os.getenv("SCYLLADB_DATACENTER"),
             table="movies",
         )
 
@@ -85,8 +86,11 @@ class MovieLoader:
 if __name__ == "__main__":
     loader = MovieLoader()
     print("⏳ Ingestion started...")
-    data_folder = "data/"
-    files = [data_folder + f for f in os.listdir(data_folder) if f.endswith(".csv")]
+    
+    # Data folder relative to src/
+    data_folder = "src/data/"
+    
+    files = [os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.endswith(".csv")]
     total_file_count = len(files)
     counter = 0
     for csv_file in files:

@@ -5,4 +5,7 @@
 # removing redirection html script files
 # test: /
 
-
+# organized pages into subfolders
+/stable/movie-recommendation.html: /stable/semantic-search/movie-recommendation.html
+/stable/rag-chatbot-scylladb.html: /stable/rag/rag-chatbot-scylladb.html
+/stable/semantic-cache-scylladb.html: /stable/semantic-cache/semantic-cache-scylladb.html

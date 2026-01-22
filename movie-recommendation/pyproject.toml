@@ -1,0 +1,16 @@
+[project]
+name = "movie-recommendation"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "psutil>=7.2.1",
+    "python-dotenv>=1.2.1",
+    "scylla-driver>=3.29.7",
+    "sentence-transformers>=5.2.0",
+    "streamlit>=1.53.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.0.0",
+]

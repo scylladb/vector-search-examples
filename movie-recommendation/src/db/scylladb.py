@@ -2,18 +2,39 @@ from cassandra.cluster import Cluster, ExecutionProfile, EXEC_PROFILE_DEFAULT
 from cassandra.policies import DCAwareRoundRobinPolicy, TokenAwarePolicy
 from cassandra.auth import PlainTextAuthProvider
 from cassandra.query import dict_factory
-import sys, os
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-import config
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 class ScyllaClient():
+    """ScyllaDB client for connecting and executing queries"""
     
-    def __init__(self, keyspace: str = None):
-        self.cluster = self._get_cluster(config.SCYLLADB_CONFIG)
-        if keyspace:
+    def __init__(
+        self, 
+        keyspace: str = None,
+        host: str = None,
+        port: str = None,
+        username: str = None,
+        password: str = None,
+        datacenter: str = None,
+        migrate=False
+    ):
+        db_config = {
+            "host": host or os.getenv("SCYLLADB_HOST"),
+            "port": port or os.getenv("SCYLLADB_PORT", "9042"),
+            "username": username or os.getenv("SCYLLADB_USERNAME", "scylla"),
+            "password": password or os.getenv("SCYLLADB_PASSWORD"),
+            "datacenter": datacenter or os.getenv("SCYLLADB_DATACENTER"),
+        }
+        self.cluster = self._get_cluster(db_config)
+        if migrate: # during migration, don't expect a keyspace
+            self.session = self.cluster.connect()
+        elif keyspace:
             self.session = self.cluster.connect(keyspace)
         else:
-            self.session = self.cluster.connect()
+            self.session = self.cluster.connect(os.getenv("SCYLLADB_KEYSPACE"))
         
     def __enter__(self):
         return self
@@ -37,10 +58,6 @@ class ScyllaClient():
             port=config["port"],
             auth_provider = PlainTextAuthProvider(username=config["username"],
                                                   password=config["password"]))
-    
-    def print_metadata(self):
-        for host in self.cluster.metadata.all_hosts():
-            print(f"Datacenter: {host.datacenter}; Host: {host.address}; Rack: {host.rack}")
     
     def get_session(self):
         return self.session
