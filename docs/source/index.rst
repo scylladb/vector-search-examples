@@ -31,17 +31,17 @@
   <div class="grid-x grid-margin-x">
 
 .. topic-box::
-  :title: Movie recommendation
-  :link: movie-recommendation
+  :title: Semantic search
+  :link: semantic-search/get-started
   :icon: icon-play-circle
   :class: large-4
   :anchor: Get started
 
-  Build your first vector search application with ScyllaDB: a movie recommendation app.
+  Build your first semantic search application with ScyllaDB Vector Search.
 
 .. topic-box::
   :title: RAG Chatbot
-  :link: rag-chatbot-scylladb
+  :link: rag/rag-chatbot-scylladb
   :icon: icon-play-circle
   :class: large-4
   :anchor: Get started
@@ -50,25 +50,27 @@
 
 .. topic-box::
   :title: Semantic Cache
-  :link: semantic-cache-scylladb
+  :link: semantic-cache/semantic-cache-scylladb
   :icon: icon-play-circle
   :class: large-4
   :anchor: Get started
 
-  Build a semantic caching app using ScyllaDB as the vector store.
+  Build a semantic caching app using ScyllaDB Vector Search.
 
 .. raw:: html
 
   </div></div></div>
   
+
 .. toctree::
    :maxdepth: 3
-   :hidden:
+   
+   semantic-search/index
+   rag/index
+   semantic-cache/index
+   integrations/index
 
-   Build a Vector Search app <movie-recommendation>
-   Build a RAG Chatbot <rag-chatbot-scylladb>
-   Build a Semantic Cache <semantic-cache-scylladb>
-   GitHub repository <https://github.com/scylladb/vector-search-examples>
+
 
 
 
