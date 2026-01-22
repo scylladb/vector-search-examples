@@ -17,7 +17,7 @@ class MovieLoader:
         loader.ingest_data(
             data=data,
             address=os.getenv("SCYLLADB_HOST"),
-            keyspace=os.getenv("SCYLLADB_KEYSPACE", "recommend"),
+            keyspace=os.getenv("SCYLLADB_KEYSPACE"),
             dc=os.getenv("SCYLLADB_DATACENTER"),
             table="movies",
         )
@@ -86,8 +86,11 @@ class MovieLoader:
 if __name__ == "__main__":
     loader = MovieLoader()
     print("⏳ Ingestion started...")
-    data_folder = "data/"
-    files = [data_folder + f for f in os.listdir(data_folder) if f.endswith(".csv")]
+    
+    # Data folder relative to src/
+    data_folder = "src/data/"
+    
+    files = [os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.endswith(".csv")]
     total_file_count = len(files)
     counter = 0
     for csv_file in files:

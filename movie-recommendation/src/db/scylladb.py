@@ -18,7 +18,8 @@ class ScyllaClient():
         port: str = None,
         username: str = None,
         password: str = None,
-        datacenter: str = None
+        datacenter: str = None,
+        migrate=False
     ):
         db_config = {
             "host": host or os.getenv("SCYLLADB_HOST"),
@@ -28,10 +29,12 @@ class ScyllaClient():
             "datacenter": datacenter or os.getenv("SCYLLADB_DATACENTER"),
         }
         self.cluster = self._get_cluster(db_config)
-        if keyspace:
+        if migrate: # during migration, don't expect a keyspace
+            self.session = self.cluster.connect()
+        elif keyspace:
             self.session = self.cluster.connect(keyspace)
         else:
-            self.session = self.cluster.connect()
+            self.session = self.cluster.connect(os.getenv("SCYLLADB_KEYSPACE"))
         
     def __enter__(self):
         return self

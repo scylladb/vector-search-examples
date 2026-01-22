@@ -11,7 +11,7 @@ class MovieRecommender:
     def similar_movies(self, user_query: str, top_k=5) -> list[Movie]:
         user_query_embedding = self.embedding_creator.create_embedding(user_query)
         db_query = f"""SELECT *
-                    FROM recommend.movies
+                    FROM movies
                     ORDER BY plot_embedding ANN OF %s LIMIT %s;
                    """
         values = [user_query_embedding, top_k]
