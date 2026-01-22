@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
-from schemas import RecommendRequest, RecommendResponse, MovieResponse
+from ..schemas import RecommendRequest, RecommendResponse, MovieResponse
 import logging
 import json
 
@@ -54,7 +54,6 @@ async def start_bot_message(request: Request, query, top_k):
                "query_string": request.url.query,
                "query": query,
                "top_k": top_k}
-    print(query, top_k, "******************")
     return templates.TemplateResponse("partials/bot_message.html", context)
 
 
