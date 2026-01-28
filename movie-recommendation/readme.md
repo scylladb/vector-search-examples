@@ -4,7 +4,8 @@ This example project shows you how to build a semantic search application with
 ScyllaDB Vector Search.
 
 ## Prerequisites
-* Sign up for [ScyllaDB Cloud](https://cloud.scylladb.com/)
+* [ScyllaDB Cloud](https://cloud.scylladb.com/) cluster with `vector search` enabled 
+* You’ve read [Quick Start Guide to Vector Search](https://cloud.docs.scylladb.com/stable/vector-search/vector-search-quick-start.html)
 * [Docker](https://docs.docker.com/get-docker/)
 
 ## Get started
