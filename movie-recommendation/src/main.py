@@ -34,7 +34,7 @@ app = FastAPI(
 
 # Mount static files
 STATIC_DIR = Path(__file__).parent / "static"
-app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="movie_recc_static")
 
 
 

@@ -1,6 +1,6 @@
 <div
   hx-ext="sse"
-  sse-connect="/generate-story/stream?query={{ query }}&top_k={{ top_k }}"
+  sse-connect="{{ url_for('generate_story_stream') }}?query={{ query }}&top_k={{ top_k }}"
   sse-close="done"
   x-data="{thinking: true}"
   @htmx:sse-open="thinking = false;"
