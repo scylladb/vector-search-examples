@@ -1,10 +1,16 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from pathlib import Path
 from .movie_recommender.recommender import MovieRecommender
 from .routers import movies
 
+
+def lifespan_init():
+    app.state.recommender = MovieRecommender()
+
+def lifespan_shutdown():
+    app.state.recommender.scylla_client.shutdown()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -13,7 +19,7 @@ async def lifespan(app: FastAPI):
     """
     # Startup: Initialize the recommender once
     print("🚀 Initializing Movie Recommender...")
-    app.state.recommender = MovieRecommender()
+    lifespan_init()
     print("✅ Movie Recommender initialized")
     
     yield
@@ -21,7 +27,7 @@ async def lifespan(app: FastAPI):
     # Shutdown: Cleanup resources
     print("🔄 Shutting down...")
     if hasattr(app.state.recommender, 'scylla_client'):
-        app.state.recommender.scylla_client.shutdown()
+        lifespan_shutdown()
     print("✅ Shutdown complete")
 
 
