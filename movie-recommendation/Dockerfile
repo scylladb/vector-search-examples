@@ -26,4 +26,4 @@ COPY src/ ./src/
 EXPOSE 8000
 
 # Run migration then start the application
-CMD ["sh", "-c", "python src/migrate.py && uvicorn src.main:app --proxy-headers --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "python src/migrate.py && uvicorn src.main:app --forwarded-allow-ips '*' --host 0.0.0.0 --port 8000"]

@@ -38,13 +38,13 @@ To run the application in Docker:
     ```
 1. Run the container (runs database migration and starts app server):
     ```sh
-    docker run --rm -p 8000:8000 --env-file .env --name movie-container movies-app
+    docker run --rm -d -p 8000:8000 --env-file .env --name movie-container movies-app
     ```
-1. Load sample data into the container:
+1. Load sample data into ScyllaDB Cloud:
     ```sh
     docker exec movie-container python src/load_data.py
     ```
-    This starts loading the database with sample data:
+    This starts loading vectors and metadata:
     ```
     ⏳ Ingestion started...
     📄 Ingesting sample data 1/3 ...
