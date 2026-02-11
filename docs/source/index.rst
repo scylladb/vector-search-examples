@@ -60,7 +60,19 @@
 .. raw:: html
 
   </div></div></div>
-  
+
+  <div class="topics-grid">
+
+    <h2 class="topics-grid__title" style="text-align: center;">Try ScyllaDB Vector Search</h2>
+    <div class="grid-container full">
+        <div class="grid-x grid-margin-x">
+          <div class="cell topic-box large-12">
+            <iframe style="width: 100%;" height="800" sandbox="allow-forms allow-modals allow-popups allow-same-origin allow-scripts" src="https://demo.scylladb.com/movie-recommendation/" style="border: 0;" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+  </div>
+  </div>
 
 .. toctree::
    :titlesonly:
