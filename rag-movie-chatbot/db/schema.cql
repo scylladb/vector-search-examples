@@ -12,7 +12,7 @@ CREATE TABLE recommend.movies (
     plot TEXT,
     plot_embedding VECTOR<FLOAT, 384>,
     PRIMARY KEY (id)
-) WITH cdc = {'enabled': 'true'};
+);
 
 
 CREATE INDEX IF NOT EXISTS ann_index ON recommend.movies(plot_embedding) 

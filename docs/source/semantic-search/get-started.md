@@ -113,8 +113,7 @@ When you run the Docker container, the migration script automatically creates th
 
 ```cql
 CREATE KEYSPACE IF NOT EXISTS example_ks 
-WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'}
-AND TABLETS = {'enabled': 'true'};
+WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'};
 
 CREATE TABLE IF NOT EXISTS example_ks.movies (
     id INT,
@@ -127,7 +126,7 @@ CREATE TABLE IF NOT EXISTS example_ks.movies (
     plot TEXT,
     plot_embedding VECTOR<FLOAT, 384>,
     PRIMARY KEY (id)
-) WITH cdc = {'enabled': 'true'};
+);
 
 CREATE INDEX IF NOT EXISTS ann_index ON example_ks.movies(plot_embedding) 
 USING 'vector_index'
@@ -138,13 +137,11 @@ WITH OPTIONS = { 'similarity_function': 'DOT_PRODUCT' };
 - `CREATE KEYSPACE IF NOT EXISTS example_ks` - Creates a keyspace
 - `'class': 'NetworkTopologyStrategy'` - Replication strategy
 - `'replication_factor': '3'` - Data is replicated across 3 nodes for high availability
-- `TABLETS = {'enabled': 'true'}` - Enables Tablets, required for Vector Search functionality
-
 **Table:**
 - `CREATE TABLE IF NOT EXISTS example_ks.movies` - Creates the movies table
 - `plot_embedding VECTOR<FLOAT, 384>` - Vector column storing 384-dimensional float embeddings of movie plots (generated using [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) from Sentence Transformers)
 - `PRIMARY KEY (id)` - Sets `id` as the primary key for data distribution
-- `cdc = {'enabled': 'true'}` - Enables Change Data Capture for streaming changes
+
 
 **Vector Index:**
 ```cql
