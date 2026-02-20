@@ -110,8 +110,7 @@ Source code is [available on GitHub](https://github.com/scylladb/vector-search-e
     ```
 1. Create `schema.cql`. This script creates a keyspace, a table for movies, and a vector index for similarity search in ScyllaDB:
     ```
-    CREATE KEYSPACE recommend WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'}
-    AND TABLETS = {'enabled': 'false'};
+    CREATE KEYSPACE recommend WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'};
 
     CREATE TABLE recommend.movies (
         id INT,
@@ -124,7 +123,7 @@ Source code is [available on GitHub](https://github.com/scylladb/vector-search-e
         plot TEXT,
         plot_embedding VECTOR<FLOAT, 384>,
         PRIMARY KEY (id)
-    ) WITH cdc = {'enabled': 'true'};
+    );
 
 
     CREATE INDEX IF NOT EXISTS ann_index ON recommend.movies(plot_embedding) 
