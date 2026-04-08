@@ -6,6 +6,7 @@ from typing import Optional
 class RecommendRequest(BaseModel):
     query: str = Field(..., description="Search query to find similar movies")
     top_k: int = Field(default=5, ge=1, le=50, description="Number of recommendations to return")
+    genre: Optional[str] = Field(default=None, description="Optional genre filter for scoped vector search")
 
 
 class MovieResponse(BaseModel):

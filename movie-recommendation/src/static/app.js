@@ -2,6 +2,7 @@ function chatBotApp() {
 	return {
 		messages: [],
 		userInput: '',
+		selectedGenre: '',
 		inputExamples: [
 			'Harry Potter defeats Voldemort',
 			'Marty McFly meets his parents in the past.',
