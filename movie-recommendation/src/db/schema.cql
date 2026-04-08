@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS example_ks.movies (
 );
 
 
-CREATE INDEX IF NOT EXISTS ann_index ON example_ks.movies(plot_embedding)
+CREATE CUSTOM INDEX IF NOT EXISTS ann_index ON example_ks.movies(plot_embedding)
 USING 'vector_index'
 WITH OPTIONS = { 'similarity_function': 'DOT_PRODUCT' };
 
