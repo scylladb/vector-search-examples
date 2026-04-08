@@ -12,14 +12,14 @@ class MovieLoader:
     
     DATE_FORMAT = "%Y-%m-%d"
     
-    def _ingest(self, data: list[dict]):
+    def _ingest(self, data: list[dict], table: str = "movies"):
         loader = ScyllaLoader()
         loader.ingest_data(
             data=data,
             address=os.getenv("SCYLLADB_HOST"),
             keyspace=os.getenv("SCYLLADB_KEYSPACE"),
             dc=os.getenv("SCYLLADB_DATACENTER"),
-            table="movies",
+            table=table,
         )
 
     def _date_is_valid(self, date_str: str) -> bool:
@@ -78,9 +78,35 @@ class MovieLoader:
                 rows.append(data)
         return rows
 
+    def _prepare_csv_by_genre(self, csv_file: str) -> list[dict]:
+        rows = []
+        with open(csv_file, encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if not self._row_is_valid(row):
+                    continue
+                plot_embedding = self.string_to_float_list(row["plot_embedding"])
+                genres = [g.strip() for g in row["genres"].split(",") if g.strip()]
+                for single_genre in genres:
+                    data = {
+                        "genre": single_genre,
+                        "id": int(row["id"]),
+                        "release_date": self._string_to_date(row["release_date"]),
+                        "title": row["title"],
+                        "tagline": row["tagline"],
+                        "imdb_id": row["imdb_id"],
+                        "poster_url": row["poster_path"],
+                        "plot": row["overview"],
+                        "plot_embedding": plot_embedding,
+                    }
+                    rows.append(data)
+        return rows
+
     def start_loader(self, csv_file: str):
         data = self._prepare_csv(csv_file)
         self._ingest(data)
+        genre_data = self._prepare_csv_by_genre(csv_file)
+        self._ingest(genre_data, table="movies_by_genre")
 
 
 if __name__ == "__main__":

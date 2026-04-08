@@ -159,11 +159,20 @@
               x-ref="userInput"
               @keyup.enter.prevent="handleSend(userInput);" />
             <input type="hidden" name="top_k" value="1" />
+            <input type="hidden" name="genre" x-model="selectedGenre" />
+            <select
+              class="select bg-[#1a202e] border-[#374151] text-white w-40"
+              x-model="selectedGenre">
+              <option value="">All Genres</option>
+              {% for genre in genres %}
+              <option value="{{ genre }}">{{ genre }}</option>
+              {% endfor %}
+            </select>
             <button
               class="btn bg-cyan-500 hover:bg-cyan-600 text-white border-none px-8"
               @click="handleSend(userInput);"
               hx-get="{{ url_for('start_bot_message') }}"
-              hx-include="input[name='query'], input[name='top_k']"
+              hx-include="input[name='query'], input[name='top_k'], input[name='genre']"
               hx-target="previous .bot-message-content"
               hx-trigger="ui-ready from:window"
               hx-swap="outerHTML">

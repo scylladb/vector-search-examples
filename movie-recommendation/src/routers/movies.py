@@ -14,19 +14,34 @@ TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 
+AVAILABLE_GENRES = [
+    "Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary",
+    "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery",
+    "Romance", "Science Fiction", "TV Movie", "Thriller", "War", "Western"
+]
+
+
+@router.get("/genres")
+async def get_genres():
+    return {"genres": AVAILABLE_GENRES}
+
+
 @router.post("/recommend", response_model=RecommendResponse)
 async def recommend_movies(request: Request, body: RecommendRequest):
     """
     Get movie recommendations based on a text query.
-    
+
     The endpoint performs vector similarity search on movie plots to find
     the most relevant movies matching the user's query.
     """
     try:
         recommender = request.app.state.recommender
-        
+
         # Get recommendations from the business logic
-        movies = recommender.similar_movies(body.query, body.top_k)
+        if body.genre:
+            movies = recommender.similar_movies_by_genre(body.query, body.genre, body.top_k)
+        else:
+            movies = recommender.similar_movies(body.query, body.top_k)
         
         # Convert Movie dataclasses to Pydantic models (exclude embedding)
         movie_responses = [
@@ -49,30 +64,34 @@ async def recommend_movies(request: Request, body: RecommendRequest):
         raise HTTPException(status_code=500, detail=f"Error getting recommendations: {str(e)}")
     
 @router.get("/start-sse", response_class=HTMLResponse)
-async def start_bot_message(request: Request, query, top_k):
+async def start_bot_message(request: Request, query, top_k, genre: str = ""):
     context = {"request": request,
                "query_string": request.url.query,
                "query": query,
-               "top_k": top_k}
+               "top_k": top_k,
+               "genre": genre}
     return templates.TemplateResponse("partials/bot_message.html", context)
 
 
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     """Serve the main chat HTML page."""
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request, "genres": AVAILABLE_GENRES})
 
 @router.get("/generate-story/stream")
-async def generate_story_stream(request: Request, query: str, top_k: int):
+async def generate_story_stream(request: Request, query: str, top_k: int, genre: str = ""):
     """Turn any movie plot into a Scylla story"""
-    
+
     try:
-        logging.info(f"Received query: '{query}' with top_k: {top_k}")
-        
+        logging.info(f"Received query: '{query}' with top_k: {top_k}, genre: '{genre}'")
+
         recommender = request.app.state.recommender
-        
+
         # Get movie recommendations from the business logic
-        movies = recommender.similar_movies(query, top_k)
+        if genre:
+            movies = recommender.similar_movies_by_genre(query, genre, top_k)
+        else:
+            movies = recommender.similar_movies(query, top_k)
         logging.info(f"Found {len(movies)} movies, first movie: {movies[0].title if movies else 'None'}")
         
         movie = movies[0]
