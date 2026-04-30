@@ -41,7 +41,7 @@
 
 .. topic-box::
   :title: RAG Chatbot
-  :link: rag/rag-chatbot-scylladb
+  :link: rag/get-started
   :icon: icon-play-circle
   :class: large-4
   :anchor: Get started
