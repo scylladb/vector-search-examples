@@ -1,12 +1,11 @@
-CREATE KEYSPACE semantic_cache WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'};
+CREATE KEYSPACE IF NOT EXISTS semantic_cache WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'};
 
-CREATE TABLE semantic_cache.prompts (
+CREATE TABLE IF NOT EXISTS semantic_cache.prompts (
     prompt_id uuid PRIMARY KEY,
     inserted_at timestamp,
     prompt_text text,
     prompt_embedding vector<float, 384>,
-    llm_response text,
-    updated_at timestamp
+    llm_response text
 );
 
 CREATE INDEX IF NOT EXISTS ann_index ON semantic_cache.prompts(prompt_embedding) 

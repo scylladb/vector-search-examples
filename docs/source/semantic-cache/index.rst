@@ -3,5 +3,5 @@ Semantic Cache
 
 .. toctree::
    :maxdepth: 1
-   
-   Tutorial <semantic-cache-scylladb>
+
+   Get started <semantic-cache-scylladb>

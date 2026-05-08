@@ -11,7 +11,7 @@ def absolute_file_path(relative_file_path):
 print("Creating keyspace and tables...")
 with open(absolute_file_path("schema.cql"), "r") as file:
     for query in file.read().split(";"):
-        if len(query) > 0:
+        if query.strip():
             session.execute(query)
 print("Migration completed.")
 

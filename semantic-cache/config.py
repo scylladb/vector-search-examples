@@ -1,15 +1,16 @@
 import os
+from dotenv import load_dotenv
 
-# this gets overriden by environment variables (if you use them)
+load_dotenv()
+
 SCYLLADB_CONFIG = {
-    "host": "node-0.aws-us-east-1.xxxxx.clusters.scylla.cloud",
-    "port": "9042",
-    "username": "scylla",
-    "password": "xxxxxxxxx",
-    "datacenter": "AWS_US_EAST_1",
-    "keyspace": "semantic_cache"
+    "host": os.getenv("SCYLLADB_HOST"),
+    "port": os.getenv("SCYLLADB_PORT", "9042"),
+    "username": os.getenv("SCYLLADB_USERNAME", "scylla"),
+    "password": os.getenv("SCYLLADB_PASSWORD"),
+    "datacenter": os.getenv("SCYLLADB_DATACENTER"),
+    "keyspace": os.getenv("SCYLLADB_KEYSPACE", "semantic_cache"),
 }
-OPENAI_API = {
-    "apikey": os.environ.get("OPENAI_APIKEY", "xxxxxxxxxx"),
-    "base_url": os.environ.get("OPENAI_BASE_URL", "https://openrouter.ai/api/v1")
-}
+
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")

@@ -2,24 +2,12 @@ from cassandra.cluster import Cluster, ExecutionProfile, EXEC_PROFILE_DEFAULT
 from cassandra.policies import DCAwareRoundRobinPolicy, TokenAwarePolicy
 from cassandra.auth import PlainTextAuthProvider
 from cassandra.query import dict_factory
-import os
 import config
 
 class ScyllaClient():
     
     def __init__(self, migrate=False):
-        if  os.getenv("scylla_host") is None:
-            scylla_config = config.SCYLLADB_CONFIG
-        else:
-            scylla_config = {
-                "host": os.getenv("scylla_host"),
-                "port": int(os.getenv("scylla_port")),
-                "username": os.getenv("scylla_user"),
-                "password": os.getenv("scylla_password"),
-                "keyspace": "semantic_cache", # hardcoded for simplicity, might change later
-                "datacenter": os.getenv("scylla_datacenter")
-            }
-        
+        scylla_config = config.SCYLLADB_CONFIG
         self.cluster = self._get_cluster(scylla_config)
         if migrate:
             self.session = self.cluster.connect()
@@ -44,10 +32,12 @@ class ScyllaClient():
             )
         return Cluster(
             execution_profiles={EXEC_PROFILE_DEFAULT: profile},
-            contact_points=[config["host"], ],
+            contact_points=[config["host"]],
             port=config["port"],
-            auth_provider = PlainTextAuthProvider(username=config["username"],
-                                                  password=config["password"]))
+            auth_provider=PlainTextAuthProvider(
+                username=config["username"],
+                password=config["password"],
+            ))
     
     def print_metadata(self):
         for host in self.cluster.metadata.all_hosts():
