@@ -1,0 +1,10 @@
+[project]
+name = "semantic-cache"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "scylla-driver==3.29.9",
+    "sentence-transformers==5.4.1",
+    "groq==1.2.0",
+    "python-dotenv>=1.0.0",
+]
