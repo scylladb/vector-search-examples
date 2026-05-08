@@ -1,239 +1,176 @@
-# Build a semantic cache layer with ScyllaDB
+# Get started with semantic cache
 
-This tutorial shows you how to build a **semantic cache layer** using OpenAI and ScyllaDB.
+This tutorial shows you how to run a **semantic cache layer** using [Groq](https://console.groq.com/) and ScyllaDB.
 
 Semantic caching allows you to reuse previous responses by matching new queries to semantically similar ones, reducing redundant LLM API calls, lowering costs, and improving response times.
 
 Source code is [available on GitHub](https://github.com/scylladb/vector-search-examples/tree/main/semantic-cache).
 
 ## Prerequisites
-* [ScyllaDB Cloud account](https://cloud.scylladb.com/)
-* OpenAI API key (using [OpenAI](https://openai.com/api/) or [OpenRouter](https://openrouter.ai/))
-* [Python 3.9 or newer](https://www.python.org/downloads/)
+* [ScyllaDB Cloud account](https://cloud.scylladb.com/) with vector search enabled
+* [Groq API key](https://console.groq.com/) (free tier is sufficient)
+* [Python 3.11 or newer](https://www.python.org/downloads/)
+* [uv](https://docs.astral.sh/uv/getting-started/installation/) package manager
+* [Git](https://git-scm.com/downloads) installed
 
-## Install Python requirements
-1. Create and activate a new Python virtual environment:
-    ```
-    virtualenv env && source env/bin/activate
-    ```
-1. Install requirements:
-    ```
-    pip install scylla-driver sentence-transformers openai
-    ```
-    This installs:
-    * ScyllaDB Python driver
-    * HuggingFace Sentence Transformers
-    * OpenAI API library
+## Clone the repository
+Clone the repository and navigate to the project folder:
 
-## Set up ScyllaDB as a vector store
-1. Create a new ScyllaDB Cloud instance with `vector search` enabled.
-1. Create `config.py` and add your database connection details (host, username, password, etc...):
-    ```py
-    SCYLLADB_CONFIG = {
-        "host": "node-0.aws-us-east-1.xxxxxxxxxxx.clusters.scylla.cloud",
-        "port": "9042",
-        "username": "scylla",
-        "password": "passwd",
-        "datacenter": "AWS_US_EAST_1",
-        "keyspace": "semantic_cache"
-    }
-    ```
-1. Create `schema.cql`:
-    ```
-    CREATE KEYSPACE semantic_cache WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'};
+```bash
+git clone https://github.com/scylladb/vector-search-examples.git
+cd vector-search-examples/semantic-cache
+```
 
-    CREATE TABLE semantic_cache.prompts (
-        prompt_id uuid PRIMARY KEY,
-        inserted_at timestamp,
-        prompt_text text,
-        prompt_embedding vector<float, 384>,
-        llm_response text,
-        updated_at timestamp
-    );
+## Install dependencies
 
-    CREATE INDEX IF NOT EXISTS ann_index ON semantic_cache.prompts(prompt_embedding) 
-    USING 'vector_index'
-    WITH OPTIONS = { 'similarity_function': 'DOT_PRODUCT' };
-    ```
-1. Create a helper module called `scylladb.py` to insert data, and query results from ScyllaDB:
-    ```py
-    from cassandra.cluster import Cluster, ExecutionProfile, EXEC_PROFILE_DEFAULT
-    from cassandra.policies import DCAwareRoundRobinPolicy, TokenAwarePolicy
-    from cassandra.auth import PlainTextAuthProvider
-    from cassandra.query import dict_factory
-    import config
+Install and sync dependencies with [uv](https://docs.astral.sh/uv/):
 
-    class ScyllaClient():
-        
-        def __init__(self):
-            scylla_config = config.SCYLLADB_CONFIG
-            self.cluster = self._get_cluster(scylla_config)
-            self.session = self.cluster.connect(scylla_config["keyspace"])
-            
-        def __enter__(self):
-            return self
-        
-        def __exit__(self, exc_type, exc_value, traceback):
-            self.shutdown()
-            
-        def shutdown(self):
-            self.cluster.shutdown()
+```bash
+uv sync
+```
 
-        def _get_cluster(self, config: dict) -> Cluster:
-            profile = ExecutionProfile(
-                load_balancing_policy=TokenAwarePolicy(
-                        DCAwareRoundRobinPolicy(local_dc=config["datacenter"])
-                    ),
-                    row_factory=dict_factory
-                )
-            return Cluster(
-                execution_profiles={EXEC_PROFILE_DEFAULT: profile},
-                contact_points=config["hosts"],
-                port=config["port"],
-                auth_provider = PlainTextAuthProvider(username=config["username"],
-                                                    password=config["password"]))
-        
-        def print_metadata(self):
-            for host in self.cluster.metadata.all_hosts():
-                print(f"Datacenter: {host.datacenter}; Host: {host.address}; Rack: {host.rack}")
-        
-        def get_session(self):
-            return self.session
-        
-        def insert_data(self, table, data: dict):
-            columns = list(data.keys())
-            values = list(data.values())
-            insert_query = f"""
-            INSERT INTO {table} ({','.join(columns)}) 
-            VALUES ({','.join(['%s' for c in columns])});
-            """
-            self.session.execute(insert_query, values)
-            
-        def query_data(self, query, values=[]):
-            rows = self.session.execute(query, values)
-            return rows.all()
-    ```
-1. Create and run `migrate.py`script:
-    ```py
-    import os
-    from scylladb import ScyllaClient
+This creates a virtual environment and installs:
+* **scylla-driver** — connects to ScyllaDB with DC-aware load balancing
+* **sentence-transformers** — generates 384-dimensional embeddings from text
+* **groq** — fast LLM inference for the generation step
 
-    client = ScyllaClient()
-    session = client.get_session()
+If you don't have `uv` installed, follow the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/).
 
-    def absolute_file_path(relative_file_path):
-        current_dir = os.path.dirname(__file__)
-        return os.path.join(current_dir, relative_file_path)
+## Configure credentials
+Copy the example environment file and fill in your credentials:
 
-    print("Creating keyspace and tables...")
-    with open(absolute_file_path("schema.cql"), "r") as file:
-        for query in file.read().split(";"):
-            if len(query) > 0:
-                session.execute(query)
-    print("Migration completed.")
+```bash
+cp .env.example .env
+```
 
-    client.shutdown()
-    ```
-    This migration script creates a keyspace, a table for cached responses, and a vector index for similarity search in ScyllaDB.
+Open `.env` and fill in your ScyllaDB Cloud connection details and Groq API key:
 
-## Build the app
-In this step, you'll build a semantic caching app that saves new responses and retrieves them later when similar questions are asked.
+```bash
+SCYLLADB_HOST=node-0.aws-us-east-1.xxxxxxxx.clusters.scylla.cloud
+SCYLLADB_PORT=9042
+SCYLLADB_USERNAME=scylla
+SCYLLADB_PASSWORD=your-password
+SCYLLADB_DATACENTER=AWS_US_EAST_1
+SCYLLADB_KEYSPACE=semantic_cache
 
-ScyllaDB acts as a persistent caching layer for LLM responses, enabling faster and less expensive operations when working with LLM APIs.
+GROQ_API_KEY=your-groq-api-key
+```
 
-1. Create new class:
-    ```py
-    class ScyllaSemanticCacheApp:
-        def __init__(self):
-            self.scylla_client = ScyllaClient()
-            self.openai_client = OpenAI(base_url=OPENAI_API["base_url"],
-                                        api_key=OPENAI_API["apikey"])
-            self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-    ```
-1. Create function to create embedding:
-    ```py
-    def create_embedding(self, text):
-        return self.embedding_model.encode(text).tolist()
-    ```
-1. Create function to query OpenAI:
-    ```python
-    def ask_openai(self, prompt):
-        completion = self.openai_client.chat.completions.create(
-        model="openai/gpt-4.1-nano",
-        messages=[{
-            "role": "user",
-            "content": prompt
-            }],
-        )
-        return completion.choices[0].message.content
-    ```
-1. Check if a semantically similar prompt already exists in the cache.
-    ```py
-    def calc_cosine_similarity(self, vec1, vec2):
-        v1, v2 = np.array(vec1), np.array(vec2)
-        return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+Find your ScyllaDB Cloud credentials in the [ScyllaDB Cloud console](https://cloud.scylladb.com/) under your cluster's **Connect** tab.
 
-    def search_cache(self, embedding, threshold=0.80):
-        k = 1
-        cql = "SELECT * FROM prompts ORDER BY prompt_embedding ANN OF %s LIMIT %s;"
-        results = self.scylla_client.query_data(cql, [embedding, k])
-        if len(results) > 0:
-            cached_response = results[0]
-            similarity = self.calc_cosine_similarity(embedding, cached_response['prompt_embedding'])
-            if similarity >= threshold:
-                return cached_response['llm_response']
-        return None
-    ```
-    * Uses ScyllaDB’s Approximate Nearest Neighbor (ANN) search.
-    * Calculates cosine similarity between embeddings.
-    * Returns cached response if similarity ≥ 0.80.
-1. Store the response if this is a new query and cannot be served by cache:
-    ```py
-    def insert_to_cache(self, prompt_text, prompt_embedding, llm_response):
-        data = {
-            "prompt_id": uuid.uuid4(),
-            "prompt_text": prompt_text,
-            "prompt_embedding": prompt_embedding,
-            "llm_response": llm_response,
-            "inserted_at": datetime.now()
-        }
-        self.scylla_client.insert_data("prompts", data)
-    ```
-1. Finally, putting it all together in a function:
-    ```py
-    def semantic_cached_prompt(self, prompt):
-        embedding = self.create_embedding(prompt)
-        cached_response = self.search_cache(embedding, threshold=0.80)
+## Set up the database
 
-        if cached_response:
-            print("Cache hit! Returning cached response...")
-            return cached_response
-        else:
-            print("Cache miss... sending request to OpenAI!")
-            response = self.ask_openai(prompt)
-            self.insert_to_cache(prompt, embedding, response)
-            return response
-    ```
-1. Test the app:
-    ```py
-    if __name__ == "__main__":
-        app = ScyllaSemanticCacheApp()
-        
-        # First query, cache miss
-        question = "What is the capital city of France?"
-        print("Question 1:", question)
-        answer = app.semantic_cached_prompt(question)
-        print("\nAnswer (comes from LLM):", answer)
-        
-        # Second query, cache hit
-        question = "What's the capital of France?"
-        print("\nQuestion 2:", question)
-        answer = app.semantic_cached_prompt(question)
-        print("\nAnswer (comes from cache):", answer)
-    ```
+Run the migration script to create the keyspace, table, and vector index:
 
-The complete semantic caching application is available on [GitHub](https://github.com/scylladb/vector-search-examples/tree/main/semantic-cache).
+```bash
+uv run python migrate.py
+```
+
+You should see:
+```
+Creating keyspace and tables...
+Migration completed.
+```
+
+## Run the application
+
+```bash
+uv run python scylla_semantic_cache.py
+```
+
+The first run queries the LLM. A semantically similar follow-up question is served directly from the cache:
+
+```
+Q: What is the capital city of France?
+Cache miss. Querying LLM...
+...answer...
+
+Q: What's the capital of France?
+  Nearest cache similarity: 0.9823
+Cache hit! Returning cached response.
+...answer...
+```
+
+## Understanding the code
+
+### Database schema
+
+The migration script creates the following schema in your ScyllaDB cluster:
+
+```cql
+CREATE KEYSPACE IF NOT EXISTS semantic_cache
+  WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '3'};
+
+CREATE TABLE IF NOT EXISTS semantic_cache.prompts (
+    prompt_id uuid PRIMARY KEY,
+    inserted_at timestamp,
+    prompt_text text,
+    prompt_embedding vector<float, 384>,
+    llm_response text
+);
+
+CREATE INDEX IF NOT EXISTS ann_index ON semantic_cache.prompts(prompt_embedding)
+  USING 'vector_index'
+  WITH OPTIONS = { 'similarity_function': 'DOT_PRODUCT' };
+```
+
+`prompt_embedding VECTOR<FLOAT, 384>` stores a 384-dimensional embedding of each prompt, generated using [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) from Sentence Transformers. The `DOT_PRODUCT` similarity function works efficiently with the normalized (unit-length) vectors this model produces.
+
+### App class
+
+`ScyllaSemanticCacheApp` wires together the ScyllaDB client, the Groq LLM, and the embedding model:
+
+```py
+class ScyllaSemanticCacheApp:
+    def __init__(self):
+        self.scylla_client = ScyllaClient()
+        self.groq_client = Groq(api_key=GROQ_API_KEY)
+        self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+```
+
+### Similarity search with ScyllaDB
+
+`search_cache()` uses ScyllaDB's ANN search together with the built-in `similarity_dot_product()` function to score the nearest match directly in the database — no need to fetch embeddings back or compute similarity in Python:
+
+```py
+def search_cache(self, embedding, threshold=0.90):
+    k = 1
+    cql = """SELECT llm_response, similarity_dot_product(prompt_embedding, %s) AS similarity
+             FROM prompts ORDER BY prompt_embedding ANN OF %s LIMIT %s;"""
+    results = self.scylla_client.query_data(cql, [embedding, embedding, k])
+    if results:
+        cached = results[0]
+        similarity = cached['similarity']
+        print(f"  Nearest cache similarity: {similarity:.4f}")
+        if similarity >= threshold:
+            return cached['llm_response']
+    return None
+```
+
+### Full caching flow
+
+`semantic_cached_prompt()` ties everything together:
+
+```py
+def semantic_cached_prompt(self, prompt):
+    embedding = self.create_embedding(prompt)
+    cached_response = self.search_cache(embedding)
+    if cached_response:
+        print("Cache hit! Returning cached response.")
+        return cached_response
+    print("Cache miss. Querying LLM...")
+    response = self.ask_llm(prompt)
+    self.insert_to_cache(prompt, embedding, response)
+    return response
+```
+
+1. Convert the prompt to a vector embedding.
+2. Query ScyllaDB for the nearest cached embedding using ANN.
+3. If the similarity score meets the threshold (0.90), return the cached response — **cache hit**.
+4. Otherwise, call the Groq LLM, store the new response in ScyllaDB, and return it — **cache miss**.
 
 ## Relevant resources
 * [ScyllaDB Cloud](https://cloud.scylladb.com/)
 * [ScyllaDB Documentation](https://docs.scylladb.com/)
+* [Groq API](https://console.groq.com/)
+
