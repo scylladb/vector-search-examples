@@ -57,6 +57,15 @@
 
   Build a semantic caching app using ScyllaDB Vector Search.
 
+.. topic-box::
+  :title: LangChain RAG
+  :link: langchain-rag/langchain-rag-scylladb
+  :icon: icon-play-circle
+  :class: large-4
+  :anchor: Get started
+
+  Build a RAG app with persistent chat memory using LangChain and ScyllaDB.
+
 .. raw:: html
 
   </div></div></div>
@@ -81,6 +90,7 @@
    semantic-search/index
    rag/index
    semantic-cache/index
+   langchain-rag/index
 
 
 
