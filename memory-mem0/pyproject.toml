@@ -1,0 +1,11 @@
+[project]
+name = "mem0-cassandra-example"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "mem0ai",
+    "scylla-driver>=3.28.0",
+    "groq>=0.9.0",
+    "sentence-transformers>=3.0.0",
+    "python-dotenv>=1.0.0",
+]

@@ -8,6 +8,7 @@ more complex LLM apps such as retrieval-augmented generation
 * [Build a vector search app with ScyllaDB](/movie-recommendation/readme.md)
 * [Build a RAG chatbot with ScyllaDB](/rag-chatbot/readme.md)
 * [Build a semantic caching layer with ScyllaDB](/semantic-cache/readme.md)
+* [Build a mem0 memory integration with ScyllaDB](/memory-mem0/README.md)
 
 ## Useful resources
 * [ScyllaDB Cloud](https://cloud.scylladb.com/)
