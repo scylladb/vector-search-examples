@@ -82,3 +82,23 @@ The script exercises the full mem0 lifecycle:
 | `delete()` | Deletes a memory by ID |
 
 mem0 stores each extracted fact as a row in `mem0.memories` with a `vector` column. Searches issue `SELECT … ORDER BY vector ANN OF …` under the hood.
+
+## Memory flow
+
+```mermaid
+flowchart LR
+    subgraph Write ["add()"]
+        A[Agent] -->|text / conversation| M1[Mem0]
+        M1 -->|extract facts| LLM[LLM\nGroq / OpenAI]
+        LLM -->|facts| E1[Embedder\nsentence-transformers]
+        E1 -->|vectors| DB[(ScyllaDB Cloud\nvector store)]
+    end
+
+    subgraph Read ["search()"]
+        A2[Agent] -->|query| M2[Mem0]
+        M2 -->|embed query| E2[Embedder\nsentence-transformers]
+        E2 -->|query vector| DB2[(ScyllaDB Cloud\nANN index)]
+        DB2 -->|top-k memories| M2
+        M2 -->|ranked results| A2
+    end
+```
