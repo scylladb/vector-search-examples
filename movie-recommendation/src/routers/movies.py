@@ -65,18 +65,17 @@ async def recommend_movies(request: Request, body: RecommendRequest):
     
 @router.get("/start-sse", response_class=HTMLResponse)
 async def start_bot_message(request: Request, query, top_k, genre: str = ""):
-    context = {"request": request,
-               "query_string": request.url.query,
+    context = {"query_string": request.url.query,
                "query": query,
                "top_k": top_k,
                "genre": genre}
-    return templates.TemplateResponse("partials/bot_message.html", context)
+    return templates.TemplateResponse(request, "partials/bot_message.html", context)
 
 
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     """Serve the main chat HTML page."""
-    return templates.TemplateResponse("index.html", {"request": request, "genres": AVAILABLE_GENRES})
+    return templates.TemplateResponse(request, "index.html", {"genres": AVAILABLE_GENRES})
 
 @router.get("/generate-story/stream")
 async def generate_story_stream(request: Request, query: str, top_k: int, genre: str = ""):
